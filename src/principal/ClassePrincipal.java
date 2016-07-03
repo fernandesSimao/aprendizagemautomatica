@@ -1,6 +1,6 @@
 package principal;
 
-import ag2.*;
+import algoritmo2.*;
 
 public class ClassePrincipal {
 

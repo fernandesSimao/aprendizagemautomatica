@@ -8,7 +8,9 @@ package gui;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import ag1.*;
+
+import algoritmo1.*;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,14 +32,14 @@ import javax.swing.JFileChooser;
  */
 public class JanelaSudoku extends javax.swing.JFrame {
 
-    private ag1.MetodoSeleccao metodoSeleccaoVector = null;
-    private ag2.MetodoSeleccao metodoSeleccaoMatriz = null;
-    private ag1.Recombinacao recombinacaoVector = null;
-    private ag2.Recombinacao recombinacaoMatriz = null;
-    private ag1.Mutacao mutacaoVector = null;
-    private ag2.Mutacao mutacaoMatriz = null;
-    ag2.AlgoritmoGenetico agMatriz = null;
-    ag1.AlgoritmoGenetico agVector = null;
+    private algoritmo1.MetodoSeleccao metodoSeleccaoVector = null;
+    private algoritmo2.MetodoSeleccao metodoSeleccaoMatriz = null;
+    private algoritmo1.Recombinacao recombinacaoVector = null;
+    private algoritmo2.Recombinacao recombinacaoMatriz = null;
+    private algoritmo1.Mutacao mutacaoVector = null;
+    private algoritmo2.Mutacao mutacaoMatriz = null;
+    algoritmo2.AlgoritmoGenetico agMatriz = null;
+    algoritmo1.AlgoritmoGenetico agVector = null;
     StringBuffer sudokuStringBuffer = new StringBuffer();
 
     /** Creates new form JanelaSudoku */
@@ -416,91 +418,106 @@ private void botaoSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             //metodoSeleccao = metodoSeleccao.compareTo("Roleta") == 0 ? new Roleta() : new TorneioComPopElite(numeroIndividuos);
 
             //recombinacao = metodoRecombinacao.compareTo("RecombinacaoUmCorte") == 0 ? new RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao) : metodoRecombinacao.compareTo("RecombinacaoDoisCortes") == 0 ? new RecombinacaoDoisCortes(probabilidadeRecombinacao) : new RecombinacaoUniforme(probabilidadeRecombinacao);
-            if (metodoRecombinacao.equals("Um corte aleatorio")) {
-                recombinacaoMatriz = new ag2.RecombinacaoUmCorteAleatorio(probabilidadeRecombinacao);
-            } else {
-                if (metodoRecombinacao.equals("Um corte em blocos de 3")) {
-                    recombinacaoMatriz = new ag2.RecombinacaoUmCorteBoloco3(probabilidadeRecombinacao);
-                } else {
-                    if (metodoRecombinacao.equals("Um corte sem repetição")) {
-                        recombinacaoMatriz = new ag2.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
-                    } else {
-                        if (metodoRecombinacao.equals("Dois cortes")) {
-                            recombinacaoMatriz = new ag2.RecombinacaoDoisCortes(probabilidadeRecombinacao);
-                        } else {
-                            if (metodoRecombinacao.equals("Uniforme")) {
-                                recombinacaoMatriz = new ag2.RecombinacaoUniforme(probabilidadeRecombinacao);
-                            } else {
-                                if (metodoRecombinacao.equals("Um corte aleatorio sem repetição")) {
-                                    recombinacaoVector = new ag1.RecombinacaoUmCorteAleatorioSemRepeticao(probabilidadeRecombinacao);
-                                } else {
-                                    if (metodoRecombinacao.equals("Um corte sem repetição")) {
-                                        recombinacaoVector = new ag1.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
-                                    } else {
-                                        if (metodoRecombinacao.equals("Dois cortes")) {
-                                            recombinacaoVector = new ag1.RecombinacaoDoisCortes(probabilidadeRecombinacao);
-                                        } else {
-                                            recombinacaoVector = new ag1.RecombinacaoUniforme(probabilidadeRecombinacao);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (metodoMutacao.equals("Numa linha troca 2 genes")) {
-                mutacaoMatriz = new ag2.MutacaoLinhaDuasPosicoes(probabilidadeMutacao);
-            } else {
-                if (metodoMutacao.equals("Aleatoria Matriz")) {
-                    mutacaoMatriz = new ag2.MutacaoAleatoria(probabilidadeMutacao);
-                } else {
-                    if (metodoMutacao.equals("Swap 5")) {
-                        mutacaoVector = new ag1.MutacaoSwap5(probabilidadeMutacao);
-                    } else {
-                        mutacaoVector = new ag1.MutacaoAleatoria(probabilidadeMutacao);
-                    }
-                }
-            }
-
-            if (metodoSeleccao.equals("Roleta Matriz")) {
-                metodoSeleccaoMatriz = new ag2.Roleta();
-            } else {
-                if (metodoSeleccao.equals("Torneio c/ Pop. Elite Matriz")) {
-                    metodoSeleccaoMatriz = new ag2.TorneioComPopElite();
-                } else {
-                    if (metodoSeleccao.equals("Torneio Simples Matriz")) {
-                        metodoSeleccaoMatriz = new ag2.TorneioSimples();
-                    } else {
-                        if (metodoSeleccao.equals("Torneio Simples Com Batota")) {
-                            metodoSeleccaoMatriz = new ag2.TorneioSimplesBatota();
-                        } else {
-                            if (metodoSeleccao.equals("Roleta Vector")) {
-                                metodoSeleccaoVector = new ag1.Roleta();
-                            } else {
-                                if (metodoSeleccao.equals("Torneio c/ Pop. Elite Vector")) {
-                                    metodoSeleccaoVector = new ag1.TorneioComPopElite();
-                                } else {
-                                    metodoSeleccaoVector = new ag1.TorneioSimples();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
+            
+            switch (metodoRecombinacao) {
+			case "Um corte aleatorio":
+				recombinacaoMatriz = new algoritmo2.RecombinacaoUmCorteAleatorio(probabilidadeRecombinacao);
+				break;
+			case "Um corte em blocos de 3":
+				recombinacaoMatriz = new algoritmo2.RecombinacaoUmCorteBoloco3(probabilidadeRecombinacao);
+				break;
+			case "Um corte sem repetição":
+				recombinacaoMatriz = new algoritmo2.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
+				break;
+			case "Dois cortes":
+				recombinacaoMatriz = new algoritmo2.RecombinacaoDoisCortes(probabilidadeRecombinacao);
+				break;
+			case "Uniforme":
+				recombinacaoMatriz = new algoritmo2.RecombinacaoUniforme(probabilidadeRecombinacao);
+				break;
+			case "Um corte aleatorio sem repetição":
+				recombinacaoVector = new algoritmo1.RecombinacaoUmCorteAleatorioSemRepeticao(probabilidadeRecombinacao);
+				break;
+			//case "Um corte sem repetição":
+			//	recombinacaoVector = new ag1.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
+			//	break;
+			//case "Dois cortes":
+			//	recombinacaoVector = new ag1.RecombinacaoDoisCortes(probabilidadeRecombinacao);
+			//	break;
+			default:
+				recombinacaoVector = new algoritmo1.RecombinacaoUniforme(probabilidadeRecombinacao);
+				break;
+			}
+            
+            switch (metodoMutacao) {
+			case "Numa linha troca 2 genes":
+				mutacaoMatriz = new algoritmo2.MutacaoLinhaDuasPosicoes(probabilidadeMutacao);
+				break;
+			case "Aleatoria Matriz":
+				mutacaoMatriz = new algoritmo2.MutacaoAleatoria(probabilidadeMutacao);
+				break;
+			case "Swap 5":
+				mutacaoVector = new algoritmo1.MutacaoSwap5(probabilidadeMutacao);
+				break;
+			default:	
+				mutacaoVector = new algoritmo1.MutacaoAleatoria(probabilidadeMutacao);
+				break;
+			}
+            
+            switch (metodoSeleccao) {
+			case "Roleta Matriz":
+				metodoSeleccaoMatriz = new algoritmo2.Roleta();
+				break;
+			case "Torneio c/ Pop. Elite Matriz":
+				metodoSeleccaoMatriz = new algoritmo2.TorneioComPopElite();
+				break;
+			case "Torneio Simples Matriz":
+				metodoSeleccaoMatriz = new algoritmo2.TorneioSimples();
+				break;
+			case "Torneio Simples Com Batota":
+				metodoSeleccaoMatriz = new algoritmo2.TorneioSimplesBatota();
+				break;
+			case "Roleta Vector":
+				metodoSeleccaoVector = new algoritmo1.Roleta();
+				break;
+			case "Torneio c/ Pop. Elite Vector":
+				metodoSeleccaoVector = new algoritmo1.TorneioComPopElite();
+				break;
+			default:
+				metodoSeleccaoVector = new algoritmo1.TorneioSimples();
+				break;
+			}
 
             //mutacao = new MutacaoSwap5(probabilidadeMutacao);
             //converteSudoku();
-
             //AlgoritmoGenetico ag = new AlgoritmoGenetico(this, 1, 200, 5, 70000, new Torneio(2), new RecombinacaoUmCorteSemRepeticao(0.84), new MutacaoSwap5(0.0221111111), 40);
 
-            if (comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9")) {
-                agMatriz = new ag2.AlgoritmoGenetico(this, seed, converteSudoku(), tamanhoPopulacao, 5, maximoGeracoes, metodoSeleccaoMatriz, recombinacaoMatriz, mutacaoMatriz, 40);
+            Boolean isTipoIndividuoMatriz9x9 = comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9"); 
+            
+            if (isTipoIndividuoMatriz9x9) {
+                agMatriz = new algoritmo2.AlgoritmoGenetico(
+                		this, 					//janela sudoku
+                		seed, 					
+                		converteSudoku(), 		//enigma
+                		tamanhoPopulacao, 
+                		numeroIndividuos, 
+                		maximoGeracoes, 
+                		metodoSeleccaoMatriz, 
+                		recombinacaoMatriz, 
+                		mutacaoMatriz, 
+                		40);					//elite
             } else {
-                agVector = new ag1.AlgoritmoGenetico(this, seed, converteSudoku(), tamanhoPopulacao, 5, maximoGeracoes, metodoSeleccaoVector, recombinacaoVector, mutacaoVector, 40);
+                agVector = new algoritmo1.AlgoritmoGenetico(
+                		this, 					//janela sudoku
+                		seed, 					
+                		converteSudoku(), 		//enigma
+                		tamanhoPopulacao, 
+                		numeroIndividuos, 
+                		maximoGeracoes, 
+                		metodoSeleccaoVector, 
+                		recombinacaoVector, 
+                		mutacaoVector, 
+                		40);					//elite
             }
 
             this.actualizaActivos(false);
@@ -509,7 +526,7 @@ private void botaoSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
                 @Override
                 public void run() {
-                    if (comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9")) {
+                    if (isTipoIndividuoMatriz9x9) {
                         agMatriz.executar();
                     } else {
                         agVector.executar();
