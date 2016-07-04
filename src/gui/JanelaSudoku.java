@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-import algoritmo1.*;
+import algvector.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,15 +32,16 @@ import javax.swing.JFileChooser;
  */
 public class JanelaSudoku extends javax.swing.JFrame {
 
-    private algoritmo1.MetodoSeleccao metodoSeleccaoVector = null;
-    private algoritmo2.MetodoSeleccao metodoSeleccaoMatriz = null;
-    private algoritmo1.Recombinacao recombinacaoVector = null;
-    private algoritmo2.Recombinacao recombinacaoMatriz = null;
-    private algoritmo1.Mutacao mutacaoVector = null;
-    private algoritmo2.Mutacao mutacaoMatriz = null;
-    algoritmo2.AlgoritmoGenetico agMatriz = null;
-    algoritmo1.AlgoritmoGenetico agVector = null;
-    StringBuffer sudokuStringBuffer = new StringBuffer();
+    private algvector.MetodoSeleccao metodoSeleccaoVector = null;
+    private algmatriz.MetodoSeleccao metodoSeleccaoMatriz = null;
+    private algvector.Recombinacao recombinacaoVector = null;
+    private algmatriz.Recombinacao recombinacaoMatriz = null;
+    private algvector.Mutacao mutacaoVector = null;
+    private algmatriz.Mutacao mutacaoMatriz = null;
+    private algmatriz.AlgoritmoGenetico agMatriz = null;
+    algvector.AlgoritmoGenetico agVector = null;
+    private StringBuffer sudokuStringBuffer = new StringBuffer();
+    private Boolean isAlgoritmoMatriz = null;
 
     /** Creates new form JanelaSudoku */
     public JanelaSudoku() {
@@ -359,46 +360,49 @@ public class JanelaSudoku extends javax.swing.JFrame {
      * Metodo chamado quando é alterado o valor da combobox que permite escolher o tipo de seleccao pretendida
      * @param evt Evento ActionPerformed
      */
-private void comboBoxSeleccaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSeleccaoActionPerformed
-    cxNumIndividuos.setEnabled(((String) comboBoxSeleccao.getSelectedItem()).compareTo("Torneio") == 0 ? true : false);
-}//GEN-LAST:event_comboBoxSeleccaoActionPerformed
+	private void comboBoxSeleccaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSeleccaoActionPerformed
+	    cxNumIndividuos.setEnabled(((String) comboBoxSeleccao.getSelectedItem()).compareTo("Torneio") == 0 ? true : false);
+	}//GEN-LAST:event_comboBoxSeleccaoActionPerformed
 
     /**
      * Metodo chamado quando é pressionado o botao que permite abrir uma caixa de dialogo 
      * para escolha do ficheiro .txt que contém o problema proposto.
      * @param Evento ActionPerformed.
      */
-private void botaoAbrirFicheiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAbrirFicheiroActionPerformed
-
-    JFileChooser jfc = new JFileChooser();
-
-    jfc.setMultiSelectionEnabled(false);
-
-    try {
-        if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
-            //preenche a sudokuStringBuffer com o conteudo do ficheiro, envia o objecto FILE
-            abrirFicheiro(jfc.getSelectedFile());
-
-            //mostra a proposta de resolucao
-            this.areaTextoSudoku.setText(sudokuStringBuffer.toString());
-
-        }
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, ex.getMessage());
-    }
-
-}//GEN-LAST:event_botaoAbrirFicheiroActionPerformed
+	private void botaoAbrirFicheiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAbrirFicheiroActionPerformed
+	
+	    JFileChooser jfc = new JFileChooser();
+	
+	    jfc.setMultiSelectionEnabled(false);
+	
+	    try {
+	        if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+	
+	            //preenche a sudokuStringBuffer com o conteudo do ficheiro, envia o objecto FILE
+	            abrirFicheiro(jfc.getSelectedFile());
+	
+	            //mostra a proposta de resolucao
+	            this.areaTextoSudoku.setText(sudokuStringBuffer.toString());
+	
+	        }
+	    } catch (Exception ex) {
+	        JOptionPane.showMessageDialog(this, ex.getMessage());
+	    }
+	
+	}//GEN-LAST:event_botaoAbrirFicheiroActionPerformed
 
     /**
      * Metodo chamado quando é pressionado o botao que faz submeter a resolução do problema proposto.
      * @param evt Evento ActionPerformed.
      */
-private void botaoSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSubmitActionPerformed
+	private void botaoSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSubmitActionPerformed
     //se houver um problema indicado
-    if (!sudokuStringBuffer.toString().isEmpty()) {
-
+		if (sudokuStringBuffer.toString().isEmpty()) {
+			JOptionPane.showMessageDialog(this, " Indique um Sudoku para resolver!!!", "Erro de Inserção", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
         try {
+        	isAlgoritmoMatriz = comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9");
             long seed = Long.parseLong(cxSeed.getText());
             int tamanhoPopulacao = Integer.parseInt(cxTamanhoPopulacao.getText());
             int maximoGeracoes = Integer.parseInt(cxMaximoGeracoes.getText());
@@ -417,85 +421,105 @@ private void botaoSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             //AQUI
             //metodoSeleccao = metodoSeleccao.compareTo("Roleta") == 0 ? new Roleta() : new TorneioComPopElite(numeroIndividuos);
 
-            //recombinacao = metodoRecombinacao.compareTo("RecombinacaoUmCorte") == 0 ? new RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao) : metodoRecombinacao.compareTo("RecombinacaoDoisCortes") == 0 ? new RecombinacaoDoisCortes(probabilidadeRecombinacao) : new RecombinacaoUniforme(probabilidadeRecombinacao);
+            //recombinacao = metodoRecombinacao.compareTo("RecombinacaoUmCorte") == 0 ? new RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao) : metodoRecombinacao.compareTo("RecombinacaoDoisCortes") == 0 ? new RecombinacaoDoisCortes(probabilidadeRecombinacao) : new RecombinacaoUniforme(probabilidadeRecombinacao);                       
             
+            //METODO RECOMBINACAO
             switch (metodoRecombinacao) {
 			case "Um corte aleatorio":
-				recombinacaoMatriz = new algoritmo2.RecombinacaoUmCorteAleatorio(probabilidadeRecombinacao);
+				recombinacaoMatriz = new algmatriz.RecombinacaoUmCorteAleatorio(probabilidadeRecombinacao);
 				break;
 			case "Um corte em blocos de 3":
-				recombinacaoMatriz = new algoritmo2.RecombinacaoUmCorteBoloco3(probabilidadeRecombinacao);
+				recombinacaoMatriz = new algmatriz.RecombinacaoUmCorteBoloco3(probabilidadeRecombinacao);
 				break;
-			case "Um corte sem repetição":
-				recombinacaoMatriz = new algoritmo2.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
+			//-->
+			case "Um corte sem repetição":				
+				if (isAlgoritmoMatriz) {
+					recombinacaoMatriz = new algmatriz.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
+				}
+				else {
+					recombinacaoVector = new algvector.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
+				}				
 				break;
 			case "Dois cortes":
-				recombinacaoMatriz = new algoritmo2.RecombinacaoDoisCortes(probabilidadeRecombinacao);
+				if (isAlgoritmoMatriz) {
+					recombinacaoMatriz = new algmatriz.RecombinacaoDoisCortes(probabilidadeRecombinacao);
+				}
+				else {
+					recombinacaoVector = new algvector.RecombinacaoDoisCortes(probabilidadeRecombinacao);
+				}
 				break;
 			case "Uniforme":
-				recombinacaoMatriz = new algoritmo2.RecombinacaoUniforme(probabilidadeRecombinacao);
-				break;
+				if (isAlgoritmoMatriz) {
+					recombinacaoMatriz = new algmatriz.RecombinacaoUniforme(probabilidadeRecombinacao);
+				}
+				else {
+					recombinacaoVector = new algvector.RecombinacaoUniforme(probabilidadeRecombinacao);
+				}
+				break; 
+			//--->
 			case "Um corte aleatorio sem repetição":
-				recombinacaoVector = new algoritmo1.RecombinacaoUmCorteAleatorioSemRepeticao(probabilidadeRecombinacao);
-				break;
-			//case "Um corte sem repetição":
-			//	recombinacaoVector = new ag1.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
-			//	break;
-			//case "Dois cortes":
-			//	recombinacaoVector = new ag1.RecombinacaoDoisCortes(probabilidadeRecombinacao);
-			//	break;
+				recombinacaoVector = new algvector.RecombinacaoUmCorteAleatorioSemRepeticao(probabilidadeRecombinacao);
+				break;						
 			default:
-				recombinacaoVector = new algoritmo1.RecombinacaoUniforme(probabilidadeRecombinacao);
-				break;
+				throw new UnsupportedOperationException();					
 			}
             
+            //METODO MUTACAO
             switch (metodoMutacao) {
-			case "Numa linha troca 2 genes":
-				mutacaoMatriz = new algoritmo2.MutacaoLinhaDuasPosicoes(probabilidadeMutacao);
+			//MATRIZ
+            case "Numa linha troca 2 genes":
+				mutacaoMatriz = new algmatriz.MutacaoLinhaDuasPosicoes(probabilidadeMutacao);
 				break;
 			case "Aleatoria Matriz":
-				mutacaoMatriz = new algoritmo2.MutacaoAleatoria(probabilidadeMutacao);
+				mutacaoMatriz = new algmatriz.MutacaoAleatoria(probabilidadeMutacao);
 				break;
+			//VECTOR
 			case "Swap 5":
-				mutacaoVector = new algoritmo1.MutacaoSwap5(probabilidadeMutacao);
+				mutacaoVector = new algvector.MutacaoSwap5(probabilidadeMutacao);
 				break;
-			default:	
-				mutacaoVector = new algoritmo1.MutacaoAleatoria(probabilidadeMutacao);
-				break;
-			}
-            
-            switch (metodoSeleccao) {
-			case "Roleta Matriz":
-				metodoSeleccaoMatriz = new algoritmo2.Roleta();
-				break;
-			case "Torneio c/ Pop. Elite Matriz":
-				metodoSeleccaoMatriz = new algoritmo2.TorneioComPopElite();
-				break;
-			case "Torneio Simples Matriz":
-				metodoSeleccaoMatriz = new algoritmo2.TorneioSimples();
-				break;
-			case "Torneio Simples Com Batota":
-				metodoSeleccaoMatriz = new algoritmo2.TorneioSimplesBatota();
-				break;
-			case "Roleta Vector":
-				metodoSeleccaoVector = new algoritmo1.Roleta();
-				break;
-			case "Torneio c/ Pop. Elite Vector":
-				metodoSeleccaoVector = new algoritmo1.TorneioComPopElite();
+			case "Aleatoria Vector":	
+				mutacaoVector = new algvector.MutacaoAleatoria(probabilidadeMutacao);
 				break;
 			default:
-				metodoSeleccaoVector = new algoritmo1.TorneioSimples();
+				throw new UnsupportedOperationException();
+			}
+            
+            
+            //METODO SELECCAO
+            switch (metodoSeleccao) {
+			//MATRIZ
+            case "Roleta Matriz":
+				metodoSeleccaoMatriz = new algmatriz.Roleta();
 				break;
+			case "Torneio c/ Pop. Elite Matriz":
+				metodoSeleccaoMatriz = new algmatriz.TorneioComPopElite();
+				break;
+			case "Torneio Simples Matriz":
+				metodoSeleccaoMatriz = new algmatriz.TorneioSimples();
+				break;
+			case "Torneio Simples Com Batota":
+				metodoSeleccaoMatriz = new algmatriz.TorneioSimplesBatota();
+				break;
+			//VECTOR
+			case "Roleta Vector":
+				metodoSeleccaoVector = new algvector.Roleta();
+				break;
+			case "Torneio c/ Pop. Elite Vector":
+				metodoSeleccaoVector = new algvector.TorneioComPopElite();
+				break;
+			case "Torneio Simples Vector":
+				metodoSeleccaoVector = new algvector.TorneioSimples();
+				break;
+			default:
+				throw new UnsupportedOperationException();
 			}
 
             //mutacao = new MutacaoSwap5(probabilidadeMutacao);
             //converteSudoku();
-            //AlgoritmoGenetico ag = new AlgoritmoGenetico(this, 1, 200, 5, 70000, new Torneio(2), new RecombinacaoUmCorteSemRepeticao(0.84), new MutacaoSwap5(0.0221111111), 40);
-
-            Boolean isTipoIndividuoMatriz9x9 = comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9"); 
+            //AlgoritmoGenetico ag = new AlgoritmoGenetico(this, 1, 200, 5, 70000, new Torneio(2), new RecombinacaoUmCorteSemRepeticao(0.84), new MutacaoSwap5(0.0221111111), 40); 
             
-            if (isTipoIndividuoMatriz9x9) {
-                agMatriz = new algoritmo2.AlgoritmoGenetico(
+            if (isAlgoritmoMatriz) {
+                agMatriz = new algmatriz.AlgoritmoGenetico(
                 		this, 					//janela sudoku
                 		seed, 					
                 		converteSudoku(), 		//enigma
@@ -507,7 +531,7 @@ private void botaoSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 		mutacaoMatriz, 
                 		40);					//elite
             } else {
-                agVector = new algoritmo1.AlgoritmoGenetico(
+                agVector = new algvector.AlgoritmoGenetico(
                 		this, 					//janela sudoku
                 		seed, 					
                 		converteSudoku(), 		//enigma
@@ -526,7 +550,7 @@ private void botaoSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
                 @Override
                 public void run() {
-                    if (isTipoIndividuoMatriz9x9) {
+                    if (isAlgoritmoMatriz) {
                         agMatriz.executar();
                     } else {
                         agVector.executar();
@@ -537,132 +561,155 @@ private void botaoSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         } catch (Exception ex) {
 
             JOptionPane.showMessageDialog(this, ex.getMessage() + " Introduza valores válidos!!!", "Erro de Inserção", JOptionPane.ERROR_MESSAGE);
-        }
-    } //fim: se houver problema indicado
-    else {
-        JOptionPane.showMessageDialog(this, " Indique um Sudoku para resolver!!!", "Erro de Inserção", JOptionPane.ERROR_MESSAGE);
-    }
-}//GEN-LAST:event_botaoSubmitActionPerformed
+        }    
+	}//GEN-LAST:event_botaoSubmitActionPerformed
 
     /**
      * Metodo chamado quado ocorre o evento associado ao carregar no botao que termina
      * a aplicação
      * @param evt Evento ActionPerformed
      */
-private void botaoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSairActionPerformed
-    System.exit(1);
-}//GEN-LAST:event_botaoSairActionPerformed
+	private void botaoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSairActionPerformed
+	    System.exit(1);
+	}//GEN-LAST:event_botaoSairActionPerformed
 
     /**
      * Metodo chamado quando é pressionado o botao que faz parar o processo de resolução do problema proposto.
      * @param evt Evento ActionPerformed
      */
-private void botaoPararActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPararActionPerformed
-    if (agMatriz != null || agVector != null) {
-        if (comboBoxTipoIndividuo.getSelectedItem().equals("Matriz 9x9")) {
-            agMatriz.setCancelou(true);
-        } else {
-            agVector.setCancelou(true);
-        }
-        this.actualizaActivos(true);
+	private void botaoPararActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPararActionPerformed
+	    if (agMatriz != null || agVector != null) {
+	        if (comboBoxTipoIndividuo.getSelectedItem().equals("Matriz 9x9")) {
+	            agMatriz.setCancelou(true);
+	        } else {
+	            agVector.setCancelou(true);
+	        }
+	        this.actualizaActivos(true);
+	
+	        this.areaTextoSudoku.setText("");
+	        this.sudokuStringBuffer = null;
+	        this.sudokuStringBuffer = new StringBuffer();
+	    }
+	}//GEN-LAST:event_botaoPararActionPerformed
 
-        this.areaTextoSudoku.setText("");
-        this.sudokuStringBuffer = null;
-        this.sudokuStringBuffer = new StringBuffer();
-    }
-}//GEN-LAST:event_botaoPararActionPerformed
+	private void comboBoxTipoIndividuoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxTipoIndividuoActionPerformed
+	
+	    DefaultComboBoxModel modelRecombinacao = null;
+	    DefaultComboBoxModel modelMutacao = null;
+	    DefaultComboBoxModel modelSeleccao = null;
+	
+	    String[] itemsRecombinacao9x9 = {
+	    		"Um corte aleatorio", 
+	    		"Um corte em blocos de 3", 
+	    		"Um corte sem repetição", 
+	    		"Dois cortes", 
+	    		"Uniforme"
+	    		};
+	    String[] itemsRecombinacaoVector = {
+	    		"Um corte aleatorio sem repetição", 
+	    		"Um corte sem repetição", 
+	    		"Dois cortes",
+	    		"Uniforme"
+	    		};
+	    
+	    String[] itemsMutacao9x9 = {
+	    		"Numa linha troca 2 genes", 
+	    		"Aleatoria Matriz"
+	    		};
+	    String[] itemsMutacaoVector = {
+	    		"Swap 5", 
+	    		"Aleatoria Vector"};
+	    
+	    String[] itemsSeleccao9x9 = {
+	    		"Torneio c/ Pop. Elite Matriz", 
+	    		"Torneio Simples Matriz", 
+	    		"Torneio Simples Com Batota", 
+	    		"Roleta Matriz"
+	    		};
+	    String[] itemsSeleccaoVector = {
+	    		"Torneio c/ Pop. Elite Vector", 
+	    		"Torneio Simples Vector", 
+	    		"Roleta Vector"
+	    		};
+	
+	    Boolean isAlgMatix = this.comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9");    
+	    modelRecombinacao = isAlgMatix ? new DefaultComboBoxModel(itemsRecombinacao9x9) : new DefaultComboBoxModel(itemsRecombinacaoVector);
+	    modelMutacao = isAlgMatix ? new DefaultComboBoxModel(itemsMutacao9x9) : new DefaultComboBoxModel(itemsMutacaoVector);
+	    modelSeleccao = isAlgMatix ? new DefaultComboBoxModel(itemsSeleccao9x9) : new DefaultComboBoxModel(itemsSeleccaoVector);
+	
+	    this.comboBoxRecombinacao.setModel(modelRecombinacao);
+	    this.comboBoxMutacao.setModel(modelMutacao);
+	    this.comboBoxSeleccao.setModel(modelSeleccao); 		//TODO DEVsf novo
+	}//GEN-LAST:event_comboBoxTipoIndividuoActionPerformed
 
-private void comboBoxTipoIndividuoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxTipoIndividuoActionPerformed
+	private void botaoExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExportarActionPerformed
+	    JFileChooser jfc = new JFileChooser();
+	    BufferedWriter bw = null;
+	    try {
+	        if (jfc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+	            bw = new BufferedWriter(new FileWriter(jfc.getSelectedFile()));
+	            bw.write(this.areaTextoSudoku.getText(), 0, this.areaTextoSudoku.getText().length());
+	
+	        }
+	    } catch (IOException ex) {
+	    } finally {
+	        try {
+	            if (bw != null) {
+	                bw.close();
+	            }
+	        } catch (IOException ex) {
+	            Logger.getLogger(JanelaSudoku.class.getName()).log(Level.SEVERE, null, ex);
+	        }
+	    }
+	    this.botaoExportar.setEnabled(false);
+	}//GEN-LAST:event_botaoExportarActionPerformed
 
-    DefaultComboBoxModel modelRecombinacao = null;
-    DefaultComboBoxModel modelMutacao = null;
-    DefaultComboBoxModel modelSeleccao = null;
-
-    String[] itemsRecombinacao9x9 = {"Um corte aleatorio", "Um corte em blocos de 3", "Um corte sem repetição", "Dois cortes", "Uniforme"};
-    String[] itemsRecombinacaoVector = {"Um corte aleatorio sem repetição", "Um corte sem repetição", "Dois cortes", "Uniforme"};
-
-    String[] itemsMutacao9x9 = {"Numa linha troca 2 genes", "Aleatoria Matriz"};
-    String[] itemsMutacaoVector = {"Swap 5", "Aleatoria Vector"};
-
-    String[] itemsSeleccao9x9 = {"Torneio c/ Pop. Elite Matriz", "Torneio Simples Matriz", "Torneio Simples Com Batota", "Roleta Matriz"};
-    String[] itemsSeleccaoVector = {"Torneio c/ Pop. Elite Vector", "Torneio Simples Vector", "Roleta Vector"};
-
-    modelRecombinacao = this.comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9") ? new DefaultComboBoxModel(itemsRecombinacao9x9) : new DefaultComboBoxModel(itemsRecombinacaoVector);
-    modelMutacao = this.comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9") ? new DefaultComboBoxModel(itemsMutacao9x9) : new DefaultComboBoxModel(itemsMutacaoVector);
-    modelSeleccao = this.comboBoxTipoIndividuo.getSelectedItem().toString().equals("Matriz 9x9") ? new DefaultComboBoxModel(itemsSeleccao9x9) : new DefaultComboBoxModel(itemsSeleccaoVector);
-
-    this.comboBoxRecombinacao.setModel(modelRecombinacao);
-    this.comboBoxMutacao.setModel(modelMutacao);
-}//GEN-LAST:event_comboBoxTipoIndividuoActionPerformed
-
-private void botaoExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExportarActionPerformed
-    JFileChooser jfc = new JFileChooser();
-    BufferedWriter bw = null;
-    try {
-        if (jfc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            bw = new BufferedWriter(new FileWriter(jfc.getSelectedFile()));
-            bw.write(this.areaTextoSudoku.getText(), 0, this.areaTextoSudoku.getText().length());
-
-        }
-    } catch (IOException ex) {
-    } finally {
-        try {
-            if (bw != null) {
-                bw.close();
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(JanelaSudoku.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    this.botaoExportar.setEnabled(false);
-}//GEN-LAST:event_botaoExportarActionPerformed
-
-/**
- * Metodo que serve para activar ou desactivar os componentes no formulário
- * @param isActivo Booleno que guarda o valor true se for para activar ou false
- * se for para desactivar
- */
-private void actualizaActivos(boolean isActivo){
-    cxSeed.setEnabled(isActivo);
-    cxTamanhoPopulacao.setEnabled(isActivo);
-    cxTamanhoPopulacao.setEnabled(isActivo);
-    cxMaximoGeracoes.setEnabled(isActivo);
-    comboBoxSeleccao.setEnabled(isActivo);
-    cxNumIndividuos.setEnabled(isActivo);
-    comboBoxRecombinacao.setEnabled(isActivo);
-    cxProbRecombinacao.setEnabled(isActivo);
-    comboBoxMutacao.setEnabled(isActivo);
-    cxProbMutacao.setEnabled(isActivo);
-    botaoSubmit.setEnabled(isActivo);
-    botaoAbrirFicheiro.setEnabled(isActivo);
-    comboBoxTipoIndividuo.setEnabled(isActivo);
-}
-/**
- * Metodo que serve para ler o problema de um ficheiro de texto. O resultado da
- * leitura vai ser attribuido a uma variavel do tipo StringBuffer.
- * @param f ponteiro para o ficheiro que vai ser lido.
- */
-private void abrirFicheiro(File f){
-        
-    
-    FileInputStream fis = null;
-    //garante que a StringBuffer nao acumula propostas de problemas
-    sudokuStringBuffer = new StringBuffer();
-
-    try{
-        BufferedReader br = new BufferedReader(new FileReader(f));
-        String linha;
-        
-        while((linha = br.readLine()) != null){
-            sudokuStringBuffer.append(linha+"\n");
-        }
-    }
-    catch(Exception ex){
-        //JOptionPane.showMessageDialog(this, Erros.getError(6));
-        JOptionPane.showMessageDialog(this, ex.getMessage());
-    }
-        
-}
+	/**
+	 * Metodo que serve para activar ou desactivar os componentes no formulário
+	 * @param isActivo Booleno que guarda o valor true se for para activar ou false
+	 * se for para desactivar
+	 */
+	private void actualizaActivos(boolean isActivo){
+	    cxSeed.setEnabled(isActivo);
+	    cxTamanhoPopulacao.setEnabled(isActivo);
+	    cxTamanhoPopulacao.setEnabled(isActivo);
+	    cxMaximoGeracoes.setEnabled(isActivo);
+	    comboBoxSeleccao.setEnabled(isActivo);
+	    cxNumIndividuos.setEnabled(isActivo);
+	    comboBoxRecombinacao.setEnabled(isActivo);
+	    cxProbRecombinacao.setEnabled(isActivo);
+	    comboBoxMutacao.setEnabled(isActivo);
+	    cxProbMutacao.setEnabled(isActivo);
+	    botaoSubmit.setEnabled(isActivo);
+	    botaoAbrirFicheiro.setEnabled(isActivo);
+	    comboBoxTipoIndividuo.setEnabled(isActivo);
+	}
+	/**
+	 * Metodo que serve para ler o problema de um ficheiro de texto. O resultado da
+	 * leitura vai ser attribuido a uma variavel do tipo StringBuffer.
+	 * @param f ponteiro para o ficheiro que vai ser lido.
+	 */
+	private void abrirFicheiro(File f){
+	        
+	    
+	    FileInputStream fis = null;
+	    //garante que a StringBuffer nao acumula propostas de problemas
+	    sudokuStringBuffer = new StringBuffer();
+	
+	    try{
+	        BufferedReader br = new BufferedReader(new FileReader(f));
+	        String linha;
+	        
+	        while((linha = br.readLine()) != null){
+	            sudokuStringBuffer.append(linha+"\n");
+	        }
+	    }
+	    catch(Exception ex){
+	        //JOptionPane.showMessageDialog(this, Erros.getError(6));
+	        JOptionPane.showMessageDialog(this, ex.getMessage());
+	    }
+	        
+	}
     /**
     * @param args the command line arguments
     */

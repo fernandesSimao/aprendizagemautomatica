@@ -1,6 +1,6 @@
 package principal;
 
-import algoritmo2.*;
+import algmatriz.*;
 
 public class ClassePrincipal {
 
