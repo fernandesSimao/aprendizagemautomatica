@@ -7,7 +7,7 @@ public class RecombinacaoUmCorteSemRepeticao extends Recombinacao {
     }
 
     public void executar(Individuo individuo1, Individuo individuo2) {
-        int[] v = {9, 18, 27, 36, 45, 54, 63, 72};  //de zero a sete
+        int[] v = {9, 18, 27, 36, 45, 54, 63, 72};  //de zero a sete        
         int pontoCorte = v[AlgoritmoGenetico.aleatorio.nextInt(v.length)];
 
         Individuo pai1 = individuo1.clone();

@@ -15,7 +15,7 @@ public class Populacao {
         individuos = new Individuo[tamanhoPopulacao];
     }
 
-    public Populacao(int tamanhoPopulacao, int tamanhoIndividuos, int[][] _enigma) {
+    public Populacao(int tamanhoPopulacao, int[][] _enigma) {
         this.enigma = _enigma;
         individuos = new Individuo[tamanhoPopulacao];
         for (int i = 0; i < tamanhoPopulacao; i++) {

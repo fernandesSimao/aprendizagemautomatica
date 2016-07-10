@@ -13,8 +13,7 @@ public class AlgoritmoGenetico {
 
     public static Random aleatorio;
     public static final int DIMENSAO = 9;
-    public int tamanhoPopulacao;
-    public int tamanhoIndividuos;
+    public int tamanhoPopulacao;    
     public int maximoGeracoes;
     private Populacao populacaoActual;
     private Populacao proximaPopulacao;
@@ -33,13 +32,12 @@ public class AlgoritmoGenetico {
     private int[][] enigma;
     
 
-    public AlgoritmoGenetico(JanelaSudoku _janelaSudoku, long seed, int[][] _enigma, int tamanhoPopulacao, int tamanhoIndividuos, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, int elite) {
+    public AlgoritmoGenetico(JanelaSudoku _janelaSudoku, long seed, int[][] _enigma, int tamanhoPopulacao, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, int elite) {
     //public AlgoritmoGenetico(long seed, int tamanhoPopulacao, int tamanhoIndividuos, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, int elite) {
         this.janelaSudoku = _janelaSudoku;
         aleatorio = new Random(seed);
         this.enigma = _enigma;
-        this.tamanhoPopulacao = tamanhoPopulacao;
-        this.tamanhoIndividuos = tamanhoIndividuos;
+        this.tamanhoPopulacao = tamanhoPopulacao;        
         this.maximoGeracoes = maximoGeracoes;
         this.metodoSeleccao = metodoSeleccao;
         this.operadorRecombinacao = operadorRecombinacao;
@@ -54,7 +52,7 @@ public class AlgoritmoGenetico {
     }
 
     public Individuo executar() {
-        populacaoActual = new Populacao(tamanhoPopulacao, tamanhoIndividuos, enigma);
+        populacaoActual = new Populacao(tamanhoPopulacao, enigma);
         proximaPopulacao = new Populacao(tamanhoPopulacao);
         
 
@@ -175,7 +173,8 @@ public class AlgoritmoGenetico {
 //                System.out.println("\nSOLUÇÃO FINAL:\n");
 //                System.out.println(populacao.getIndividuo(i).toString());
 //                System.out.println("\nSOLUÇÃO FINAL:\n");
-                janelaSudoku.mostraJanelaGreatSuccess();
+                //TODO Set values
+            	janelaSudoku.imprimeGreatSuccess("TODO Nome fx", geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness(), 0, 0, null, 0.001, 0.001);
                 return true;
             }
         }
@@ -187,7 +186,7 @@ public class AlgoritmoGenetico {
 
         this.populacaoActual = null;
         this.proximaPopulacao = null;
-        this.populacaoActual = new Populacao(tamanhoPopulacao, tamanhoIndividuos, enigma);
+        this.populacaoActual = new Populacao(tamanhoPopulacao, enigma);
         this.proximaPopulacao = new Populacao(tamanhoPopulacao);
     }
 
@@ -225,8 +224,8 @@ public class AlgoritmoGenetico {
         StandardInput.readString();
          */
         
-        janelaSudoku.setAreaTextoSudoku(melhorIndividuoRun.toString());
-        janelaSudoku.setInfoBoxes(Integer.toString(geracao), Double.toString(melhorIndividuoGeracao.getFitness()), Double.toString(melhorIndividuoRun.getFitness()));
+        janelaSudoku.imprimePuzzleAtual(melhorIndividuoRun.toString());
+        janelaSudoku.imprimeInfoFitness(geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness());
 
         //System.out.println("Geração: " + Integer.toString(geracao) + " | Melhor Fitness Geração: " + melhorIndividuoGeracao.getFitness() + " | Melhor Fitness Total: " + melhorIndividuoRun.getFitness());
     }

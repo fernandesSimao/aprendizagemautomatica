@@ -1,6 +1,8 @@
 package algmatriz;
 
 import gui.JanelaSudoku;
+import principal.IInterface;
+
 import java.util.Random;
 import java.util.LinkedList;
 
@@ -8,8 +10,8 @@ public class AlgoritmoGenetico {
 
     public static Random aleatorio;
     public int tamanhoPopulacao;
-    public int tamanhoIndividuos;
     public int maximoGeracoes;
+    private long seed;
     private Populacao populacaoActual;
     private Populacao proximaPopulacao;
     private MetodoSeleccao metodoSeleccao;
@@ -22,27 +24,30 @@ public class AlgoritmoGenetico {
     double mediaGeracao;
     Individuo melhorIndividuoRun;
     int geracaoMelhorIndividuoRun;
-    private JanelaSudoku janelaSudoku;
+    private IInterface janelaSudoku;
     private boolean cancelou = false;
     private int[][] enigma;
+    private String nomeFx;
 
-    public AlgoritmoGenetico(JanelaSudoku janelaSudoku, long seed, int[][] _enigma, int tamanhoPopulacao, int tamanhoIndividuos, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, int elite) {
+    public AlgoritmoGenetico(IInterface janelaSudoku, long seed, int[][] _enigma, int tamanhoPopulacao, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, String nomeFx) {
         this.janelaSudoku = janelaSudoku;
         aleatorio = new Random(seed);
+        this.seed = seed;
         this.enigma = _enigma;
-        this.tamanhoPopulacao = tamanhoPopulacao;
-        this.tamanhoIndividuos = tamanhoIndividuos;
+        this.tamanhoPopulacao = tamanhoPopulacao;        
         this.maximoGeracoes = maximoGeracoes;
         this.metodoSeleccao = metodoSeleccao;
         this.operadorRecombinacao = operadorRecombinacao;
         this.operadorMutacao = operadorMutacao;
-
+        this.nomeFx = nomeFx;
+        
+        
         this.melhorIndividuoGeracaoAnterior = 0;
         this.numOcorrenciasMesmoFitness = 0;
     }
 
     public Individuo executar() {
-        populacaoActual = new Populacao(tamanhoPopulacao, tamanhoIndividuos, enigma);
+        populacaoActual = new Populacao(tamanhoPopulacao, enigma);
         proximaPopulacao = new Populacao(tamanhoPopulacao);
 
         geracao = 0;
@@ -152,8 +157,9 @@ public class AlgoritmoGenetico {
         //    restartPopulation();
         //}
         for (int i = 0; i < populacao.getTamanho(); i++) {
-            if (populacao.getIndividuo(i).solucaoFinal()) {
-                janelaSudoku.mostraJanelaGreatSuccess();
+            if (populacao.getIndividuo(i).solucaoFinal()) {                
+            	//, int seed, int tamanhoPopulacao, int tamanhoTorneio, double probabilidadeRecombinacao, double probabilidadeMutacao
+                janelaSudoku.imprimeGreatSuccess(this.nomeFx, geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness(), this.seed, this.tamanhoPopulacao, -99, this.operadorRecombinacao.getProbabilidade(), this.operadorMutacao.getProbabilidade());
                 return true;
             }
         }
@@ -165,7 +171,7 @@ public class AlgoritmoGenetico {
 
         this.populacaoActual = null;
         this.proximaPopulacao = null;
-        this.populacaoActual = new Populacao(tamanhoPopulacao, tamanhoIndividuos, enigma);
+        this.populacaoActual = new Populacao(tamanhoPopulacao, enigma);
         this.proximaPopulacao = new Populacao(tamanhoPopulacao);
     }
 
@@ -205,8 +211,9 @@ public class AlgoritmoGenetico {
         //System.out.println(melhorIndividuoRun);
         //System.out.println("Geração: " + geracao + " | Melhor Fitness Geração: " + melhorIndividuoGeracao.getFitness() + " | Melhor Fitness Total: " + melhorIndividuoRun.getFitness());
         
-        janelaSudoku.setAreaTextoSudoku(melhorIndividuoRun.toString());
-        janelaSudoku.setInfoBoxes(Integer.toString(geracao), Double.toString(melhorIndividuoGeracao.getFitness()), Double.toString(melhorIndividuoRun.getFitness()));
+    	
+    	janelaSudoku.imprimePuzzleAtual(melhorIndividuoRun.toString());
+        janelaSudoku.imprimeInfoFitness(geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness());		
     }
     
     public boolean isCancelou() {

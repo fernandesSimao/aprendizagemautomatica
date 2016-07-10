@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import algvector.*;
+import principal.IInterface;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,7 +31,7 @@ import javax.swing.JFileChooser;
  *
  * @author  fernandes
  */
-public class JanelaSudoku extends javax.swing.JFrame {
+public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 
     private algvector.MetodoSeleccao metodoSeleccaoVector = null;
     private algmatriz.MetodoSeleccao metodoSeleccaoMatriz = null;
@@ -523,20 +524,19 @@ public class JanelaSudoku extends javax.swing.JFrame {
                 		this, 					//janela sudoku
                 		seed, 					
                 		converteSudoku(), 		//enigma
-                		tamanhoPopulacao, 
-                		numeroIndividuos, 
+                		tamanhoPopulacao,                 		
                 		maximoGeracoes, 
                 		metodoSeleccaoMatriz, 
                 		recombinacaoMatriz, 
                 		mutacaoMatriz, 
-                		40);					//elite
+                		//40,						//elite
+                		"");					//TODO nome fx
             } else {
                 agVector = new algvector.AlgoritmoGenetico(
                 		this, 					//janela sudoku
                 		seed, 					
                 		converteSudoku(), 		//enigma
                 		tamanhoPopulacao, 
-                		numeroIndividuos, 
                 		maximoGeracoes, 
                 		metodoSeleccaoVector, 
                 		recombinacaoVector, 
@@ -728,7 +728,8 @@ public class JanelaSudoku extends javax.swing.JFrame {
      * @param sudokuString String que guarda o valor que se pretende que seja 
      * impresso na JTextArea
      */
-    public void setAreaTextoSudoku(String texto) {
+    @Override
+    public void imprimePuzzleAtual(String texto) {
         this.areaTextoSudoku.setText(texto);
     }
     
@@ -771,8 +772,8 @@ public class JanelaSudoku extends javax.swing.JFrame {
     /**
      * Metodo que serve para informar que o problema foi resolvido
      */
-    public void mostraJanelaGreatSuccess(){
-        this.actualizaActivos(true);
+    public void imprimeGreatSuccess(String nomeFx, int geracao, double fitnessMelhorIndividuoGeracao, double fitnessMelhorIndividuoRun, long seed, int tamanhoPopulacao, Integer tamanhoTorneio, double probabilidadeRecombinacao, double probabilidadeMutacao){
+    	this.actualizaActivos(true);
         this.botaoExportar.setEnabled(true);
         JOptionPane.showMessageDialog(this, "Great Success!!!\nProblema Solucionado", "Parabéns", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -780,14 +781,15 @@ public class JanelaSudoku extends javax.swing.JFrame {
     /**
      * Metodo que serve para actualizar o conteudo das caixas de texto que mostram
      * a informação relativa á resolução do problema.
-     * @param numeroGeracao Numero da geração actual.
+     * @param geracao Numero da geração actual.
      * @param melhorFitnessGeracao Fitness do melhor indivíduo da geração actual.
      * @param melhorFitnessRun Fitness do indivíduo do Run
      */
-    public void setInfoBoxes(String numeroGeracao, String melhorFitnessGeracao, String melhorFitnessRun){
-        this.cxNumeroGeração.setText(numeroGeracao);
-        this.cxMelhorFitnessGeracao.setText(melhorFitnessGeracao);
-        this.cxMelhorFitnessRun.setText(melhorFitnessRun);
+    @Override
+    public void imprimeInfoFitness(int geracao, double melhorFitnessGeracao, double melhorFitnessRun){
+        this.cxNumeroGeração.setText(Integer.toString(geracao));
+        this.cxMelhorFitnessGeracao.setText(Double.toString(melhorFitnessGeracao));
+        this.cxMelhorFitnessRun.setText(Double.toString(melhorFitnessRun));
     }
     
     /**

@@ -1,8 +1,6 @@
 package algvector;
 
-import input.StandardInput;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Individuo {
@@ -12,7 +10,7 @@ public class Individuo {
     
     private ArrayList<Gene> cromossomaTotal = new ArrayList<Gene>();
     private int[][] cromossomaMatriz = new int[DIMENSAO][DIMENSAO];
-    private int pontos[] = {0, 0, 3, 5, 7, 11, 13, 17, 19, 23};
+    //private int pontos[] = {0, 0, 3, 5, 7, 11, 13, 17, 19, 23};
     protected double fitness = Double.MAX_VALUE;
     protected double acumulado;
 
