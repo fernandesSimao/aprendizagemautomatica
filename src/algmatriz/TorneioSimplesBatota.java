@@ -4,9 +4,9 @@ public class TorneioSimplesBatota extends MetodoSeleccao {
 
     private int tamanho;
 
-    public TorneioSimplesBatota() {
-        this(2);
-    }
+//    public TorneioSimplesBatota() {
+//        this(2);
+//    }
 
     public TorneioSimplesBatota(int tamanho) {
         this.tamanho = tamanho;

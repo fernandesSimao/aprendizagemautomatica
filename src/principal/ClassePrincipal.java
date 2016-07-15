@@ -6,45 +6,135 @@ import java.util.List;
 
 public class ClassePrincipal implements IInterface {
 
-    public static void main(String[] args) {
+	public enum MetodosSeleccao { Roleta, Torneio, TorneioComPopulacaoElite };
+	public enum OperadoresRecombinacao { DoisCortes, UmCorteAleatorio, UmCorteBlocos3, UmCorteSemRepeticao, Uniforme };
+	public enum OperadoresMutacao { Aleatoria,LINHA_TROCA_2_GENES };
+	
+	private long seed; 
+	private int tamanhoPopulacao;
+	private MetodosSeleccao metodosSeleccao;
+	private Integer tamanhoTorneio;
+	private Double percentagemPopulacaoElite;
+	private OperadoresRecombinacao operadoresRecombinacao;
+	private double probabilidadeRecombinacao;
+	private OperadoresMutacao operadoresMutacao;
+	private double probabilidadeMutacao;
+	private int maximoGeracoes;
+	
+	List<String> ficheiros = null;
+	
+    public ClassePrincipal(
+    		long _seed, 
+    		int _tamanhoPopulacao,
+			MetodosSeleccao _metodosSeleccao,
+			Integer _tamanhoTorneio,
+			Double _percentagemPopulacaoElite,
+			OperadoresRecombinacao _operadoresRecombinacao,
+			double _probabilidadeRecombinacao,
+			OperadoresMutacao _operadoresMutacao,
+			double _probabilidadeMutacao,
+			int _maximoGeracoes) {
     	
-    	List<String> ficheiros = HandlerFicheiro.getPathsAbsolutasFicheiros();
-    	//listFilesForFolder(pastaSudokus);
-    	int[][] sudoku;
-    	for (String ficheiro : ficheiros) {
-    		sudoku = converteSudoku(ficheiro);
-    		executaAlgoritmoGenetico(sudoku, ficheiro.substring(ficheiro.lastIndexOf("/")));
-		}
-//    	HandlerFicheiro.escreveEmFx();
+    	this.seed = _seed; 
+    	this.tamanhoPopulacao = _tamanhoPopulacao;
+    	this.metodosSeleccao = _metodosSeleccao;
+    	this.tamanhoTorneio = _tamanhoTorneio;
+    	this.percentagemPopulacaoElite = _percentagemPopulacaoElite;
+    	this.operadoresRecombinacao = _operadoresRecombinacao;
+    	this.probabilidadeRecombinacao = _probabilidadeRecombinacao;
+    	this.operadoresMutacao = _operadoresMutacao;
+    	this.probabilidadeMutacao = _probabilidadeMutacao;
+    	this.maximoGeracoes = _maximoGeracoes;
+    	
+    	ficheiros = //HandlerFicheiro.getPathsAbsolutasFicheiros();
+				 HandlerFicheiro.getListaFicheiros();    	    
     }
     
-    private static void executaAlgoritmoGenetico(int[][] sudoku, String nomeFx) {
+    public void executa() {
     	
-    	long seed = 1;
-    	int tamanhoPopulacao = 200;  	  	
-  	  	int maximoGeracoes = 70000;
+    	int[][] sudoku;
+    	
+    	for (String ficheiro : ficheiros) {
+    		if (ficheiro.indexOf("!") != -1) {
+				continue;
+			}
+    		sudoku = converteSudoku(ficheiro);
+    		executaAlgoritmoGenetico(sudoku, ficheiro.substring(ficheiro.lastIndexOf("/")));//, 
+		}    	
+    }
+    
+    private void executaAlgoritmoGenetico(
+    		int[][] sudoku, String nomeFx//,
+//    		long seed,
+//    		int tamanhoPopulacao,
+//    		MetodosSeleccao metodosSeleccao,
+//    		Integer tamanhoTorneio,
+//    		Double percentagemPopulacaoElite,
+//    		
+//    		OperadoresRecombinacao operadoresRecombinacao,
+//    		double probabilidadeRecombinacao,
+//	
+//    		OperadoresMutacao operadoresMutacao,
+//    		double probabilidadeMutacao,
+//    		int maximoGeracoes    		
+    		) {
+    	
+  	  	algmatriz.MetodoSeleccao metodoSeleccao; 
+  	  	switch (this.metodosSeleccao) {
+		case Roleta:
+			metodoSeleccao = new algmatriz.Roleta();
+			break;
+		case Torneio:
+			metodoSeleccao = new algmatriz.TorneioSimples(tamanhoTorneio);
+			break;
+		case TorneioComPopulacaoElite:
+			metodoSeleccao = new algmatriz.TorneioComPopElite(tamanhoTorneio, percentagemPopulacaoElite);
+			break;
+		default: throw new UnsupportedOperationException();
+			
+		}
   	  	
-  	  	int tamanhoTorneio = 2;	  
-  	  	algmatriz.MetodoSeleccao metodoSeleccao = 
-			  //new algmatriz.Roleta();
-			  //new algmatriz.Torneio(tamanhoTorneio);
-  	  			new algmatriz.TorneioComPopElite();
-  	  	double probabilidadeRecombinacao = 0.7;
-  	  	algmatriz.Recombinacao operadorRecombinacao = 
-  	  			new algmatriz.RecombinacaoUmCorteAleatorio(probabilidadeRecombinacao);
-  	  	double probabilidadeMutacao = 0.03234567;
-  	  	algmatriz.Mutacao operadorMutacao = new algmatriz.MutacaoAleatoria(probabilidadeMutacao);
+  	  	algmatriz.Recombinacao operadorRecombinacao;
+
+  	  	switch(operadoresRecombinacao) {
+	  	  	case DoisCortes:
+	  	  		operadorRecombinacao = new algmatriz.RecombinacaoDoisCortes(probabilidadeRecombinacao);
+	  	  		break;
+	  	  	case UmCorteAleatorio:
+	  	  		operadorRecombinacao = new algmatriz.RecombinacaoUmCorteAleatorio(probabilidadeRecombinacao);
+	  	  		break;
+	  	  	case UmCorteBlocos3:
+	  	  		operadorRecombinacao = new algmatriz.RecombinacaoUmCorteBoloco3(probabilidadeRecombinacao);
+	  	  		break;
+	  	  	case UmCorteSemRepeticao:
+	  	  		operadorRecombinacao = new algmatriz.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
+	  	  		break;
+	  	  	case Uniforme:
+	  	  		operadorRecombinacao = new algmatriz.RecombinacaoUniforme(probabilidadeRecombinacao);
+	  	  		break;
+	  	  	default: throw new UnsupportedOperationException();
+  	  	}
+  	  	
+  	  	algmatriz.Mutacao operadorMutacao;// = new algmatriz.MutacaoAleatoria(probabilidadeMutacao);
+  	  	switch (operadoresMutacao) {
+	  	  	case Aleatoria:
+				operadorMutacao = new algmatriz.MutacaoAleatoria(probabilidadeMutacao);
+				break;
+	  	  	case LINHA_TROCA_2_GENES:
+	  	  		operadorMutacao = new algmatriz.MutacaoLinhaDuasPosicoes(probabilidadeMutacao);
+	  	  		break;
+			default: throw new UnsupportedOperationException();
+			
+		}
     		  
-  	  	algmatriz.AlgoritmoGenetico ag = new algmatriz.AlgoritmoGenetico(
-  	  			new ClassePrincipal(), 
+  	  	algmatriz.AlgoritmoGenetico ag = new algmatriz.AlgoritmoGenetico(this, 
   	  			seed, 
-  	  			sudoku,
-  	  			tamanhoPopulacao,     		  
+  	  			sudoku, 
+  	  			tamanhoPopulacao, 
   	  			maximoGeracoes, 
   	  			metodoSeleccao, 
   	  			operadorRecombinacao, 
-  	  			operadorMutacao,
-  	  			//40,
+  	  			operadorMutacao, 
   	  			nomeFx);
   	  	
   	  	new Thread(new Runnable() {
@@ -101,11 +191,24 @@ public class ClassePrincipal implements IInterface {
 	}
 
 	@Override
-	public void imprimeGreatSuccess(String nomeFx, int geracao, double fitnessMelhorIndividuoGeracao, double fitnessMelhorIndividuoRun, long seed, int tamanhoPopulacao, Integer tamanhoTorneio, double probabilidadeRecombinacao, double probabilidadeMutacao) {
+	public void imprimeGreatSuccess(Boolean sucesso, String nomeFx, int geracao, double fitnessMelhorIndividuoRun, long seed, int tamanhoPopulacao, double probabilidadeRecombinacao, double probabilidadeMutacao) {
 		
-		String info = String.format("%s;%d;%d;%d;%.3f;%d;%.3f", nomeFx, geracao, seed, tamanhoPopulacao, probabilidadeRecombinacao, tamanhoTorneio, probabilidadeMutacao);
+		String info = String.format("%b;%s;%d;%.2f;%d;%d;%s;%d;%.2f;%s;%.2f;%s;%.9f", 
+				sucesso, 
+				nomeFx.substring(1, nomeFx.length()), 
+				geracao, 
+				fitnessMelhorIndividuoRun,
+				this.seed, 
+				this.tamanhoPopulacao,
+				this.metodosSeleccao.toString(),
+				this.tamanhoTorneio,	
+				this.percentagemPopulacaoElite,
+				this.operadoresRecombinacao.toString(),
+				this.probabilidadeRecombinacao, 
+				this.operadoresMutacao.toString(),
+				this.probabilidadeMutacao);
 		HandlerFicheiro.escreveEmFx(info);
-		System.out.println("Great success para " + nomeFx + " em " + geracao + " geracoes");
+		System.out.println((!sucesso ? "Not so great" : "Great"  + " success para ") + nomeFx + " em " + geracao + " geracoes");
 		
 		
 	}

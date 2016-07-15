@@ -174,7 +174,7 @@ public class AlgoritmoGenetico {
 //                System.out.println(populacao.getIndividuo(i).toString());
 //                System.out.println("\nSOLUÇÃO FINAL:\n");
                 //TODO Set values
-            	janelaSudoku.imprimeGreatSuccess("TODO Nome fx", geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness(), 0, 0, null, 0.001, 0.001);
+            	janelaSudoku.imprimeGreatSuccess(true, "TODO Nome fx", geracao,  melhorIndividuoRun.getFitness(), 0, 0, 0.001, 0.001);
                 return true;
             }
         }

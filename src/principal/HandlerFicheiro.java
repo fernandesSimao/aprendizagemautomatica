@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -23,15 +24,16 @@ public class HandlerFicheiro {
     	byte [] byteArray = (input + "\n").getBytes();
     	ByteBuffer buffer = ByteBuffer.wrap(byteArray);
     	
-    	Path path = Paths.get("/home/sfernandes/dev/eclipse/workspace/AprendizagemAutomatica/SudokuML/output.LOG");    	
+    	Path path = Paths.get("./fxAux/output.LOG");    	
     		
-    	AsynchronousFileChannel channel = null;    	
+    	AsynchronousFileChannel channel = null;
+    	FileLock lock = null;
     	try {
     		
 			channel = AsynchronousFileChannel.open(path, StandardOpenOption.WRITE);
 			
 			Future<FileLock> featureLock = channel.lock();
-			FileLock lock = featureLock.get();
+			lock = featureLock.get();
 			if (lock.isValid()) {
 				Future<Integer> featureWrite = channel.write(buffer, channel.size());
 			}
@@ -44,7 +46,10 @@ public class HandlerFicheiro {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-    	finally { if (channel != null && channel.isOpen()) { try { channel.close(); } catch (IOException e1) { e1.printStackTrace(); } } }    	
+    	finally { 
+    		if (lock != null && lock.isValid()) { try { lock.release(); } catch (IOException e) { e.printStackTrace(); } }
+    		if (channel != null && channel.isOpen()) { try { channel.close(); } catch (IOException e1) { e1.printStackTrace(); } }    		
+    	}    	
     }
 	
 	public static StringBuffer abrirFicheiro(String pathFx) {
@@ -72,6 +77,29 @@ public class HandlerFicheiro {
     	return sudokuStringBuffer;
     }
 	
+	public static List<String> getListaFicheiros() {
+    	
+		List<String> listaFicheiros = new ArrayList<>();		
+		File file = new File("./fxAux/ficheiros.TXT");    
+		String pathFx = "./puzzlesSudoku";
+    	
+    	BufferedReader br = null;
+    	try {
+			br = new BufferedReader(new FileReader(file));
+			String linha;
+			
+			while ((linha = br.readLine()) != null) {
+				listaFicheiros.add(pathFx + "/" + linha);			
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+    	finally {
+    		if (br != null) { try { br.close(); } catch (IOException e) { /* TODO Auto-generated catch block*/ e.printStackTrace(); } }
+    	}    
+    	return listaFicheiros;
+    }
 	
 	public static List<String> getPathsAbsolutasFicheiros() {
 		ficheiros = new ArrayList<>();
@@ -90,5 +118,5 @@ public class HandlerFicheiro {
     }
 	
 	private static List<String> ficheiros;
-	private static final File pastaSudokus = new File("/home/sfernandes/dev/eclipse/workspace/AprendizagemAutomatica/SudokuML/puzzlesSudoku");
+	private static final File pastaSudokus = new File("./puzzlesSudoku");
 }

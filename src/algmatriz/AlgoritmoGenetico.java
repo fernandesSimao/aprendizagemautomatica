@@ -62,32 +62,28 @@ public class AlgoritmoGenetico {
             geracao++;
             avaliar(populacaoActual);
             
-            /*
-            if (melhorIndividuoGeracaoAnterior == melhorIndividuoGeracao.getFitness()) {
-                numOcorrenciasMesmoFitness++;
-            } else {
-                numOcorrenciasMesmoFitness = 0;
-            }
-            melhorIndividuoGeracaoAnterior = melhorIndividuoGeracao.getFitness();
+            
+            numOcorrenciasMesmoFitness = melhorIndividuoGeracaoAnterior == melhorIndividuoRun.getFitness() ? numOcorrenciasMesmoFitness + 1 : 0;
+            melhorIndividuoGeracaoAnterior = melhorIndividuoRun.getFitness();
             
             if (numOcorrenciasMesmoFitness >= 400) {
-                //antigaMutacao = operadorMutacao.getProbabilidade();
-                //operadorMutacao.setProbabilidadePerc(2);
-                //numMutacoesEspeciais = 5;
-                //numOcorrenciasMesmoFitness = 0;
-                
-                populacaoActual = null;
+                antigaMutacao = operadorMutacao.getProbabilidade();
+                operadorMutacao.setProbabilidadePerc(1);
+                numMutacoesEspeciais = 5;
+                numOcorrenciasMesmoFitness = 0;
+            }
+            else if (numOcorrenciasMesmoFitness >= 1000) {	//TODO dead code
+            	populacaoActual = null;
                 proximaPopulacao = null;
-                populacaoActual = new Populacao(tamanhoPopulacao, tamanhoIndividuos);
+                populacaoActual = new Populacao(tamanhoPopulacao, enigma);
                 proximaPopulacao = new Populacao(tamanhoPopulacao);
                 numOcorrenciasMesmoFitness = 0;
             }
-            /*if(numMutacoesEspeciais > 0) {
-                numMutacoesEspeciais--;
+            if(numMutacoesEspeciais-- > 0) {
                 if(numMutacoesEspeciais <= 0) {
                     operadorMutacao.setProbabilidade(antigaMutacao);
                 }
-            }*/
+            }
         }
         return melhorIndividuoRun;
     }
@@ -151,15 +147,18 @@ public class AlgoritmoGenetico {
 
     private boolean criterioParagem(Populacao populacao, int geracaoActual) {
         if (geracaoActual == maximoGeracoes) {
+        	janelaSudoku.imprimeGreatSuccess(false, this.nomeFx, geracao, melhorIndividuoRun.getFitness(), this.seed, this.tamanhoPopulacao, this.operadorRecombinacao.getProbabilidade(), this.operadorMutacao.getProbabilidade());
             return true;
         }
         //if(geracaoActual == 2000){
         //    restartPopulation();
         //}
         for (int i = 0; i < populacao.getTamanho(); i++) {
-            if (populacao.getIndividuo(i).solucaoFinal()) {                
-            	//, int seed, int tamanhoPopulacao, int tamanhoTorneio, double probabilidadeRecombinacao, double probabilidadeMutacao
-                janelaSudoku.imprimeGreatSuccess(this.nomeFx, geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness(), this.seed, this.tamanhoPopulacao, -99, this.operadorRecombinacao.getProbabilidade(), this.operadorMutacao.getProbabilidade());
+            if (populacao.getIndividuo(i).solucaoFinal()) {
+            	
+            	
+            	
+                janelaSudoku.imprimeGreatSuccess(true, this.nomeFx, geracao, melhorIndividuoRun.getFitness(), this.seed, this.tamanhoPopulacao, this.operadorRecombinacao.getProbabilidade(), this.operadorMutacao.getProbabilidade());
                 return true;
             }
         }

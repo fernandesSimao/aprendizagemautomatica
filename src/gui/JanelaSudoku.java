@@ -408,7 +408,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
             int tamanhoPopulacao = Integer.parseInt(cxTamanhoPopulacao.getText());
             int maximoGeracoes = Integer.parseInt(cxMaximoGeracoes.getText());
             //String metodoDeSeleccao = (String) comboBoxSeleccao.getSelectedItem();
-            int numeroIndividuos = Integer.parseInt(cxNumIndividuos.getText());
+            int tamanhoTorneio = Integer.parseInt(cxNumIndividuos.getText());
 
             String metodoRecombinacao = comboBoxRecombinacao.getSelectedItem().toString();
             String metodoMutacao = comboBoxMutacao.getSelectedItem().toString();
@@ -493,13 +493,14 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 				metodoSeleccaoMatriz = new algmatriz.Roleta();
 				break;
 			case "Torneio c/ Pop. Elite Matriz":
-				metodoSeleccaoMatriz = new algmatriz.TorneioComPopElite();
+				double percentagemPopulacaoElite = 0.05;
+				metodoSeleccaoMatriz = new algmatriz.TorneioComPopElite(tamanhoTorneio, percentagemPopulacaoElite);
 				break;
 			case "Torneio Simples Matriz":
-				metodoSeleccaoMatriz = new algmatriz.TorneioSimples();
+				metodoSeleccaoMatriz = new algmatriz.TorneioSimples(tamanhoTorneio);
 				break;
 			case "Torneio Simples Com Batota":
-				metodoSeleccaoMatriz = new algmatriz.TorneioSimplesBatota();
+				metodoSeleccaoMatriz = new algmatriz.TorneioSimplesBatota(tamanhoTorneio);
 				break;
 			//VECTOR
 			case "Roleta Vector":
@@ -772,7 +773,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
     /**
      * Metodo que serve para informar que o problema foi resolvido
      */
-    public void imprimeGreatSuccess(String nomeFx, int geracao, double fitnessMelhorIndividuoGeracao, double fitnessMelhorIndividuoRun, long seed, int tamanhoPopulacao, Integer tamanhoTorneio, double probabilidadeRecombinacao, double probabilidadeMutacao){
+    public void imprimeGreatSuccess(Boolean sucesso, String nomeFx, int geracao, double fitnessMelhorIndividuoRun, long seed, int tamanhoPopulacao, double probabilidadeRecombinacao, double probabilidadeMutacao){
     	this.actualizaActivos(true);
         this.botaoExportar.setEnabled(true);
         JOptionPane.showMessageDialog(this, "Great Success!!!\nProblema Solucionado", "Parabéns", JOptionPane.INFORMATION_MESSAGE);

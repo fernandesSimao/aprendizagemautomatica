@@ -4,9 +4,9 @@ public class TorneioSimples extends MetodoSeleccao {
 
     private int tamanho;
 
-    public TorneioSimples() {
-        this(2);
-    }
+//    public TorneioSimples() {
+//        this(2);
+//    }
 
     public TorneioSimples(int tamanho) {
         this.tamanho = tamanho;

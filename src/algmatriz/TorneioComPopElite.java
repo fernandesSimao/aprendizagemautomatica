@@ -5,15 +5,16 @@ import java.util.LinkedList;
 public class TorneioComPopElite extends MetodoSeleccao {
 
     private int tamanho;
-    private double percentagemPopulacaoElite = 0.05;
+    private double percentagemPopulacaoElite;
     private int tamanhoPopulacaoElite;
 
-    public TorneioComPopElite() {
-        this(2);
-    }
+//    public TorneioComPopElite() {
+//        this(2);
+//    }
 
-    public TorneioComPopElite(int tamanho) {
+    public TorneioComPopElite(int tamanho, double percentagemPopulacaoElite) {
         this.tamanho = tamanho;
+        this.percentagemPopulacaoElite = percentagemPopulacaoElite;
     }
 
     public void executar(Populacao populacaoOrigem, Populacao populacaoResultante) {
