@@ -79,6 +79,9 @@ public class HandlerFicheiro {
 	
 	public static List<String> getListaFicheiros() {
     	
+		System.out.println(new File("").getAbsolutePath());
+		System.out.println(new File("/").getAbsolutePath());
+		
 		List<String> listaFicheiros = new ArrayList<>();		
 		File file = new File("./fxAux/ficheiros.TXT");    
 		String pathFx = "./puzzlesSudoku";

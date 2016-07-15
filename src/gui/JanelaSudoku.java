@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-import algvector.*;
+import algvector_DEP.*;
 import principal.IInterface;
 
 import java.io.BufferedReader;
@@ -33,14 +33,14 @@ import javax.swing.JFileChooser;
  */
 public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 
-    private algvector.MetodoSeleccao metodoSeleccaoVector = null;
+    private algvector_DEP.MetodoSeleccao metodoSeleccaoVector = null;
     private algmatriz.MetodoSeleccao metodoSeleccaoMatriz = null;
-    private algvector.Recombinacao recombinacaoVector = null;
+    private algvector_DEP.Recombinacao recombinacaoVector = null;
     private algmatriz.Recombinacao recombinacaoMatriz = null;
-    private algvector.Mutacao mutacaoVector = null;
+    private algvector_DEP.Mutacao mutacaoVector = null;
     private algmatriz.Mutacao mutacaoMatriz = null;
     private algmatriz.AlgoritmoGenetico agMatriz = null;
-    algvector.AlgoritmoGenetico agVector = null;
+    algvector_DEP.AlgoritmoGenetico agVector = null;
     private StringBuffer sudokuStringBuffer = new StringBuffer();
     private Boolean isAlgoritmoMatriz = null;
 
@@ -133,7 +133,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
         comboBoxRecombinacao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Um corte aleatorio", "Um corte em blocos de 3", "Um corte sem repetição", "Dois cortes", "Uniforme" }));
         comboBoxRecombinacao.setToolTipText("Método de recombinção pretendido");
 
-        jLabel6.setText("Número de Individuos");
+        jLabel6.setText("Num de Individuos no torneio");
 
         cxNumIndividuos.setToolTipText("Número de Individuos que vão participar no Torneio");
 
@@ -186,6 +186,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
         cxMelhorFitnessRun.setEditable(false);
 
         comboBoxTipoIndividuo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Matriz 9x9", "Vector 81 posicões" }));
+        comboBoxTipoIndividuo.setEnabled(false);
         comboBoxTipoIndividuo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxTipoIndividuoActionPerformed(evt);
@@ -438,7 +439,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 					recombinacaoMatriz = new algmatriz.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
 				}
 				else {
-					recombinacaoVector = new algvector.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
+					recombinacaoVector = new algvector_DEP.RecombinacaoUmCorteSemRepeticao(probabilidadeRecombinacao);
 				}				
 				break;
 			case "Dois cortes":
@@ -446,7 +447,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 					recombinacaoMatriz = new algmatriz.RecombinacaoDoisCortes(probabilidadeRecombinacao);
 				}
 				else {
-					recombinacaoVector = new algvector.RecombinacaoDoisCortes(probabilidadeRecombinacao);
+					recombinacaoVector = new algvector_DEP.RecombinacaoDoisCortes(probabilidadeRecombinacao);
 				}
 				break;
 			case "Uniforme":
@@ -454,12 +455,12 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 					recombinacaoMatriz = new algmatriz.RecombinacaoUniforme(probabilidadeRecombinacao);
 				}
 				else {
-					recombinacaoVector = new algvector.RecombinacaoUniforme(probabilidadeRecombinacao);
+					recombinacaoVector = new algvector_DEP.RecombinacaoUniforme(probabilidadeRecombinacao);
 				}
 				break; 
 			//--->
 			case "Um corte aleatorio sem repetição":
-				recombinacaoVector = new algvector.RecombinacaoUmCorteAleatorioSemRepeticao(probabilidadeRecombinacao);
+				recombinacaoVector = new algvector_DEP.RecombinacaoUmCorteAleatorioSemRepeticao(probabilidadeRecombinacao);
 				break;						
 			default:
 				throw new UnsupportedOperationException();					
@@ -476,10 +477,10 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 				break;
 			//VECTOR
 			case "Swap 5":
-				mutacaoVector = new algvector.MutacaoSwap5(probabilidadeMutacao);
+				mutacaoVector = new algvector_DEP.MutacaoSwap5(probabilidadeMutacao);
 				break;
 			case "Aleatoria Vector":	
-				mutacaoVector = new algvector.MutacaoAleatoria(probabilidadeMutacao);
+				mutacaoVector = new algvector_DEP.MutacaoAleatoria(probabilidadeMutacao);
 				break;
 			default:
 				throw new UnsupportedOperationException();
@@ -504,13 +505,13 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 				break;
 			//VECTOR
 			case "Roleta Vector":
-				metodoSeleccaoVector = new algvector.Roleta();
+				metodoSeleccaoVector = new algvector_DEP.Roleta();
 				break;
 			case "Torneio c/ Pop. Elite Vector":
-				metodoSeleccaoVector = new algvector.TorneioComPopElite();
+				metodoSeleccaoVector = new algvector_DEP.TorneioComPopElite();
 				break;
 			case "Torneio Simples Vector":
-				metodoSeleccaoVector = new algvector.TorneioSimples();
+				metodoSeleccaoVector = new algvector_DEP.TorneioSimples();
 				break;
 			default:
 				throw new UnsupportedOperationException();
@@ -533,7 +534,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
                 		//40,						//elite
                 		"");					//TODO nome fx
             } else {
-                agVector = new algvector.AlgoritmoGenetico(
+                agVector = new algvector_DEP.AlgoritmoGenetico(
                 		this, 					//janela sudoku
                 		seed, 					
                 		converteSudoku(), 		//enigma

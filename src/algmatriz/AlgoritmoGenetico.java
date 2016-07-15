@@ -63,27 +63,29 @@ public class AlgoritmoGenetico {
             avaliar(populacaoActual);
             
             
-            numOcorrenciasMesmoFitness = melhorIndividuoGeracaoAnterior == melhorIndividuoRun.getFitness() ? numOcorrenciasMesmoFitness + 1 : 0;
-            melhorIndividuoGeracaoAnterior = melhorIndividuoRun.getFitness();
+            //Evitar minimos locais
             
-            if (numOcorrenciasMesmoFitness >= 400) {
-                antigaMutacao = operadorMutacao.getProbabilidade();
-                operadorMutacao.setProbabilidadePerc(1);
-                numMutacoesEspeciais = 5;
-                numOcorrenciasMesmoFitness = 0;
-            }
-            else if (numOcorrenciasMesmoFitness >= 1000) {	//TODO dead code
-            	populacaoActual = null;
-                proximaPopulacao = null;
-                populacaoActual = new Populacao(tamanhoPopulacao, enigma);
-                proximaPopulacao = new Populacao(tamanhoPopulacao);
-                numOcorrenciasMesmoFitness = 0;
-            }
-            if(numMutacoesEspeciais-- > 0) {
-                if(numMutacoesEspeciais <= 0) {
-                    operadorMutacao.setProbabilidade(antigaMutacao);
-                }
-            }
+//            numOcorrenciasMesmoFitness = melhorIndividuoGeracaoAnterior == melhorIndividuoRun.getFitness() ? numOcorrenciasMesmoFitness + 1 : 0;
+//            melhorIndividuoGeracaoAnterior = melhorIndividuoRun.getFitness();
+            
+//            if (numOcorrenciasMesmoFitness >= 400) {
+//                antigaMutacao = operadorMutacao.getProbabilidade();
+//                operadorMutacao.setProbabilidadePerc(1);
+//                numMutacoesEspeciais = 5;
+//                numOcorrenciasMesmoFitness = 0;
+//            }
+//            else if (numOcorrenciasMesmoFitness >= 1000) {	//TODO dead code
+//            	populacaoActual = null;
+//                proximaPopulacao = null;
+//                populacaoActual = new Populacao(tamanhoPopulacao, enigma);
+//                proximaPopulacao = new Populacao(tamanhoPopulacao);
+//                numOcorrenciasMesmoFitness = 0;
+//            }
+//            if(numMutacoesEspeciais-- > 0) {
+//                if(numMutacoesEspeciais <= 0) {
+//                    operadorMutacao.setProbabilidade(antigaMutacao);
+//                }
+//            }
         }
         return melhorIndividuoRun;
     }

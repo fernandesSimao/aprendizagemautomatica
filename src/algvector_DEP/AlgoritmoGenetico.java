@@ -1,4 +1,4 @@
-package algvector;
+package algvector_DEP;
 
 //import gui.JanelaSudoku;
 import java.util.Random;
