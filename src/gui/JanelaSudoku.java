@@ -363,7 +363,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
      * @param evt Evento ActionPerformed
      */
 	private void comboBoxSeleccaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSeleccaoActionPerformed
-	    cxNumIndividuos.setEnabled(((String) comboBoxSeleccao.getSelectedItem()).compareTo("Torneio") == 0 ? true : false);
+	    cxNumIndividuos.setEnabled(((String) comboBoxSeleccao.getSelectedItem()).contains("Torneio") ? true : false);
 	}//GEN-LAST:event_comboBoxSeleccaoActionPerformed
 
     /**
@@ -533,17 +533,17 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
                 		mutacaoMatriz, 
                 		//40,						//elite
                 		"");					//TODO nome fx
-            } else {
-                agVector = new algvector_DEP.AlgoritmoGenetico(
-                		this, 					//janela sudoku
-                		seed, 					
-                		converteSudoku(), 		//enigma
-                		tamanhoPopulacao, 
-                		maximoGeracoes, 
-                		metodoSeleccaoVector, 
-                		recombinacaoVector, 
-                		mutacaoVector, 
-                		40);					//elite
+//            } else {
+//                agVector = new algvector_DEP.AlgoritmoGenetico(                		
+//                		this, 					//janela sudoku
+//                		seed, 					
+//                		converteSudoku(), 		//enigma
+//                		tamanhoPopulacao, 
+//                		maximoGeracoes, 
+//                		metodoSeleccaoVector, 
+//                		recombinacaoVector, 
+//                		mutacaoVector 
+//                		);					//elite
             }
 
             this.actualizaActivos(false);
@@ -684,7 +684,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
 	    cxProbMutacao.setEnabled(isActivo);
 	    botaoSubmit.setEnabled(isActivo);
 	    botaoAbrirFicheiro.setEnabled(isActivo);
-	    comboBoxTipoIndividuo.setEnabled(isActivo);
+	    //comboBoxTipoIndividuo.setEnabled(isActivo);
 	}
 	/**
 	 * Metodo que serve para ler o problema de um ficheiro de texto. O resultado da
@@ -788,7 +788,7 @@ public class JanelaSudoku extends javax.swing.JFrame implements IInterface {
      * @param melhorFitnessRun Fitness do indivíduo do Run
      */
     @Override
-    public void imprimeInfoFitness(int geracao, double melhorFitnessGeracao, double melhorFitnessRun){
+    public void imprimeInfoFitness(String nomeFx, int geracao, double melhorFitnessGeracao, double melhorFitnessRun){
         this.cxNumeroGeração.setText(Integer.toString(geracao));
         this.cxMelhorFitnessGeracao.setText(Double.toString(melhorFitnessGeracao));
         this.cxMelhorFitnessRun.setText(Double.toString(melhorFitnessRun));

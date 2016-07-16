@@ -127,7 +127,9 @@ public class ClassePrincipal implements IInterface {
 			
 		}
     		  
-  	  	algmatriz.AlgoritmoGenetico ag = new algmatriz.AlgoritmoGenetico(this, 
+  	  	//final algmatriz.AlgoritmoGenetico ag = new algmatriz.AlgoritmoGenetico(this,
+  	  final  algvector_DEP.AlgoritmoGenetico ag = new algvector_DEP.AlgoritmoGenetico(
+  			  this,
   	  			seed, 
   	  			sudoku, 
   	  			tamanhoPopulacao, 
@@ -185,9 +187,9 @@ public class ClassePrincipal implements IInterface {
 	}
 
 	@Override
-	public void imprimeInfoFitness(int geracao, double fitnessMelhorIndividuoGeracao,
+	public void imprimeInfoFitness(String nomeFx, int geracao, double fitnessMelhorIndividuoGeracao,
 			double fitnessMelhorIndividuoRun) {
-		System.out.println(String.format("Geracao #%d | Melhor fitness: da geracao: %.2f / do run: %.2f", geracao, fitnessMelhorIndividuoGeracao, fitnessMelhorIndividuoRun));
+		System.out.println(String.format("Fx [%s] | geracao #%d | Melhor fitness: da geracao: %.2f / do run: %.2f", nomeFx, geracao, fitnessMelhorIndividuoGeracao, fitnessMelhorIndividuoRun));
 	}
 
 	@Override

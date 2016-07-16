@@ -214,7 +214,7 @@ public class AlgoritmoGenetico {
         
     	
     	janelaSudoku.imprimePuzzleAtual(melhorIndividuoRun.toString());
-        janelaSudoku.imprimeInfoFitness(geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness());		
+        janelaSudoku.imprimeInfoFitness(this.nomeFx, geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness());		
     }
     
     public boolean isCancelou() {

@@ -2,10 +2,15 @@ package algvector_DEP;
 
 //import gui.JanelaSudoku;
 import java.util.Random;
+
+import algmatriz.MetodoSeleccao;
+import algmatriz.Mutacao;
+import algmatriz.Recombinacao;
 import input.StandardInput;
 import java.util.LinkedList;
 import java.util.List;
 import principal.ClassePrincipal;
+import principal.IInterface;
 import gui.*;
 
 public class AlgoritmoGenetico {
@@ -30,11 +35,14 @@ public class AlgoritmoGenetico {
     private JanelaSudoku janelaSudoku;
     private boolean cancelou = false;
     private int[][] enigma;
-    
+    private String nomeFx;
 
-    public AlgoritmoGenetico(JanelaSudoku _janelaSudoku, long seed, int[][] _enigma, int tamanhoPopulacao, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, int elite) {
-    //public AlgoritmoGenetico(long seed, int tamanhoPopulacao, int tamanhoIndividuos, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, int elite) {
-        this.janelaSudoku = _janelaSudoku;
+    public AlgoritmoGenetico(IInterface janelaSudoku, long seed, int[][] _enigma, int tamanhoPopulacao, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, String nomeFx) {
+    	JanelaSudoku _janelaSudoku = null;
+		//public AlgoritmoGenetico(long seed, int tamanhoPopulacao, int tamanhoIndividuos, int maximoGeracoes, MetodoSeleccao metodoSeleccao, Recombinacao operadorRecombinacao, Mutacao operadorMutacao, int elite) {
+    	
+    	
+    	this.janelaSudoku = _janelaSudoku;
         aleatorio = new Random(seed);
         this.enigma = _enigma;
         this.tamanhoPopulacao = tamanhoPopulacao;        
@@ -48,10 +56,16 @@ public class AlgoritmoGenetico {
         
 //        janela.setVisible(true);
 //        janela.trataString("Sudoku S&T");
-        
+        this.nomeFx = nomeFx;
     }
 
-    public Individuo executar() {
+    public AlgoritmoGenetico(ClassePrincipal classePrincipal, long seed, int[][] sudoku, int tamanhoPopulacao2,
+			int maximoGeracoes2, MetodoSeleccao metodoSeleccao2, Recombinacao operadorRecombinacao2,
+			Mutacao operadorMutacao2, String nomeFx2) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Individuo executar() {
         populacaoActual = new Populacao(tamanhoPopulacao, enigma);
         proximaPopulacao = new Populacao(tamanhoPopulacao);
         
@@ -110,7 +124,8 @@ public class AlgoritmoGenetico {
             novaPopulacao.add(populacaoActual.getIndividuo(i));
             novaPopulacao.add(populacaoActual.getIndividuo(i + 1));
 
-            operadorRecombinacao.executar(filho1, filho2);
+            //TODO: terminhar
+            //operadorRecombinacao.executar(filho1, filho2);
 
             novaPopulacao.add(filho1);
             novaPopulacao.add(filho2);
@@ -128,7 +143,7 @@ public class AlgoritmoGenetico {
         populacaoActual.setPopulacao(Populacao.seleccionaPopulacaoElite(pp, pp.getTamanho() * (populacaoActual.getTamanho() / pp.getTamanho())));
 
     //seleccao(populacaoActual, proximaPopulacao);
-    //populacaoActual = criarNovaPopulacao(populacaoActual, proximaPopulacao);
+    populacaoActual = criarNovaPopulacao(populacaoActual, proximaPopulacao);
     }
 
     private void avaliar(Populacao populacao) {
@@ -157,7 +172,8 @@ public class AlgoritmoGenetico {
     }
 
     private void seleccao(Populacao populacaoActual, Populacao proximaPopulacao) {
-        metodoSeleccao.executar(populacaoActual, proximaPopulacao);
+        
+    	//metodoSeleccao.executar(populacaoActual, proximaPopulacao);
     //
     }
 
@@ -193,14 +209,16 @@ public class AlgoritmoGenetico {
     void recombinacao(Populacao populacao) {
         for (int i = 0; i < populacao.getTamanho() - 1; i += 2) {
             if (aleatorio.nextDouble() < operadorRecombinacao.getProbabilidade()) {
-                operadorRecombinacao.executar(populacao.getIndividuo(i), populacao.getIndividuo(i + 1));
+                
+            	//TODO DEV ismal
+            	//operadorRecombinacao.executar(populacao.getIndividuo(i), populacao.getIndividuo(i + 1));
             }
         }
     }
 
     void mutacao(Populacao populacao) {
         for (int i = 0; i < populacao.getTamanho(); i++) {
-            operadorMutacao.executar(populacao.getIndividuo(i));
+            //operadorMutacao.executar(populacao.getIndividuo(i));
         }
     }
 
@@ -225,7 +243,7 @@ public class AlgoritmoGenetico {
          */
         
         janelaSudoku.imprimePuzzleAtual(melhorIndividuoRun.toString());
-        janelaSudoku.imprimeInfoFitness(geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness());
+        janelaSudoku.imprimeInfoFitness(null, geracao, melhorIndividuoGeracao.getFitness(), melhorIndividuoRun.getFitness());
 
         //System.out.println("Geração: " + Integer.toString(geracao) + " | Melhor Fitness Geração: " + melhorIndividuoGeracao.getFitness() + " | Melhor Fitness Total: " + melhorIndividuoRun.getFitness());
     }
