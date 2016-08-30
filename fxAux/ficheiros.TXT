@@ -1,0 +1,6 @@
+!easiest.sudoku
+!matrizMuitoFacil.sudoku
+!intermediate.sudoku
+!dificil.sudoku
+!enunciado.sudoku
+matrizZeros.sudoku

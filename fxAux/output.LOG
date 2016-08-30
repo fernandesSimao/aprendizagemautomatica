@@ -1,0 +1,11 @@
+success;ficheiro;geracao;seed;populacao;seleccao;tamanho_torneio;perc_pop_elite;recombinacao;prob_recombinacao;mutacao;prob_mutacao
+false;intermediate.sudoku;10000;1;200;TorneioComPopulacaoElite;2;0,05;UmCorteAleatorio;0,70;Aleatoria;0,032345670
+true;easiest.sudoku;540;1;200;TorneioComPopulacaoElite;2;0,05;UmCorteAleatorio;0,70;Aleatoria;0,032345670
+true;easiest.sudoku;751;10;200;TorneioComPopulacaoElite;2;0,05;UmCorteAleatorio;0,70;Aleatoria;0,032345670
+true;easiest.sudoku;571;0,00;4;200;Torneio;2;0,05;Uniforme;0,70;Aleatoria;0,032545670
+true;easiest.sudoku;571;0,00;4;200;Torneio;2;0,05;Uniforme;0,70;Aleatoria;0,032545670
+false;intermediate.sudoku;100000;5,00;4;200;Torneio;2;0,05;Uniforme;0,70;Aleatoria;0,032545670
+true;enunciado.sudoku;4285;0,00;4;200;TorneioComPopulacaoElite;4;0,08;UmCorteSemRepeticao;0,70;Aleatoria;0,042345670
+true;enunciado.sudoku;4285;0,00;4;200;TorneioComPopulacaoElite;4;0,08;UmCorteSemRepeticao;0,70;Aleatoria;0,042345670
+false;matrizZeros.sudoku;100000;12,00;10;200;TorneioComPopulacaoElite;4;0,05;UmCorteSemRepeticao;0,70;LINHA_TROCA_2_GENES;0,042345670
+false;matrizZeros.sudoku;100000;6,00;10;200;TorneioComPopulacaoElite;4;0,05;UmCorteSemRepeticao;0,70;LINHA_TROCA_2_GENES;0,032345670
